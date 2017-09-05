@@ -21,7 +21,21 @@
   <img src="https://source.unsplash.com/7bwQXzbF6KE/800x500">
 
   <style>
+    :root {
+      --base: #ffc600;
+      --spacing: 10px;
+      --blur: 10px;
+    }
 
+    img {
+      padding: var(--spacing);
+      background: var(--base);
+      filter: blur(var(--blur));
+    }
+
+    h1{
+      color: var(--base);
+    }
     /*
       misc styles, nothing to do with CSS variables
     */
@@ -45,6 +59,20 @@
   </style>
 
   <script>
+    const inputs = document.querySelectorAll('.controls input');
+    
+    inputs.forEach(input => input.addEventListener('change', updateData));
+    //mousemove事件可以讓USER在拖拉的時候就即時看到變化
+    inputs.forEach(input => input.addEventListener('mousemove', updateData));
+
+    function updateData(){
+      //因為有的input沒有data-size，若沒設定 || ''，會undefined唷!!
+      const suffix = this.dataset.sizing || '';
+      //console.log(this.dataset)
+      //console.log(this.value)
+      //document.documentElement = 文檔根元素<html>
+      document.documentElement.style.setProperty(`--${this.name}`, this.value + suffix);
+    }
   </script>
 
 </body>
