@@ -58,7 +58,54 @@
   <audio data-key="76" src="sounds/tink.wav"></audio>
 
 <script>
+  window.addEventListener('keydown', playSound);
 
+  function playSound(e) {
+    //console.log('e',e)
+    const audio = document.querySelector(`audio[data-key='${e.keyCode}']`);
+    // console.log(audio);
+    const key = document.querySelector(`.key[data-key='${e.keyCode}']`);
+    //console.log(key);
+    if (!audio) return; //表列上沒有的按鈕就不繼續執行
+    audio.play();
+    audio.currentTime = 0; //回到音檔的0秒
+    key.classList.add('playing'); //JQ寫法: key.addClass('playing')
+    //注意： Internet Explorer 9 及更早 IE 版本浏览器不支持 classList 属性。
+  }
+
+  const keys = document.querySelectorAll('.key'); //返回的是NodeList
+  keys.forEach(key => key.addEventListener('transitionend', removeTransition));
+
+  function removeTransition(e){
+    //console.log(e);
+    if(e.propertyName != 'transform') return; //如果不是"transform"就跳掉
+    //console.log(e.propertyName)
+    this.classList.remove('playing')
+  }
+  /*-----------------------------------------
+    以下ES2015寫法
+    -----------------------------------------
+    window.addEventListener('keydown', playSound);
+    
+    function playSound(e) {
+      var audio = document.querySelector('audio[data-key=\'' + e.keyCode + '\']');
+      var key = document.querySelector('.key[data-key=\'' + e.keyCode + '\']');
+      if (!audio) return; 
+      audio.play();
+      audio.currentTime = 0; 
+      key.classList.add('playing'); 
+    }
+
+    var keys = document.querySelectorAll('.key');
+    keys.forEach(function (key) {
+      return key.addEventListener('transitionend', removeTransition);
+    });
+
+    function removeTransition(e) {
+      if (e.propertyName != 'transform') return; 
+      this.classList.remove('playing');
+    }
+    -----------------------------------------*/
 </script>
 
 
