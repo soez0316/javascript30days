@@ -31,29 +31,98 @@
 
     // Array.prototype.filter()
     // 1. Filter the list of inventors for those who were born in the 1500's
+    //----篩選出出生在16世紀（1500- 1599年）的發明家。
+    //過濾操作，有點像 SQL 裡面的 select 語句。篩出運行結果是 true 的組成數組返回。
+    /*const fifteen = inventors.filter(function(inventor){
+      if(inventor.year >= 1500 && inventor.year < 1600){
+        return true;
+      }
+    })*/
+    //可以利用ES6的箭頭函數簡化，而且由於 if 語句的存在並不是必要的，可以寫成下面這樣
+    const fifteen = inventors.filter(inventor => (inventor.year >= 1500 && inventor.year < 1600))
+    console.table(fifteen);
 
     // Array.prototype.map()
     // 2. Give us an array of the inventors' first and last names
+    //----列出發明家的名和姓的數組。
+    //把數組中的每個元素進行處理後，返回一個新的數組。
+    const fullNames = inventors.map( inventor => inventor.first + ' ' + inventor.last);
+    console.log(fullNames)
 
     // Array.prototype.sort()
     // 3. Sort the inventors by birthdate, oldest to youngest
+    //----根據發明家的出生日期，按照從大到小的順序進行排序。
+    //默認情況下，Array.prototype.sort() 會將數組以字符串的形式進行升序排列（10 會排在 2 之前），但 sort 也可以接受一個函數作為參數。所以需要對數字大小排序時需要自己設定一個比較函數
+    /*const ordered = inventors.sort(function(a,b){
+      if(a.year > b.year){
+        return 1;
+      }
+      else{
+        return -1;
+      }
+    })*/
+    const ordered = inventors.sort((a,b) => a.year > b.year ? 1 : -1)
+    console.table(ordered);
 
     // Array.prototype.reduce()
     // 4. How many years did all the inventors live?
+    //----所有的發明家一共活了多少歲。
+    //這是一個歸併數組的方法，它接受一個函數作為參數（這個函數可以理解成累加器），它會遍歷數組的所有項，然後構建一個最終的返回值，這個值就是這個累加器的第一個參數
+    const totalYears = inventors.reduce((total, inventor) => {
+        return total + (inventor.passed - inventor.year);
+      }, 0);
+
+      console.log(totalYears);
 
     // 5. Sort the inventors by years lived
+    //----按照發明家的年齡大小排序
+    const oldest = inventors.sort(function (a, b) {
+      const lastGuy = a.passed - a.year;
+      const nextGuy = b.passed - b.year;
+      // if(lastGuy > nextGuy){
+      //   return -1;
+      // }
+      // else{
+      //   return 1;
+      // } 這段簡寫為 ↓
+      return lastGuy > nextGuy ? -1 : 1;
+    })
+    console.table(oldest)
 
     // 6. create a list of Boulevards in Paris that contain 'de' anywhere in the name
+    //----列出巴黎所有名字中包含'de'的路名。在以下網站提供的信息來做
     // https://en.wikipedia.org/wiki/Category:Boulevards_in_Paris
-
+    /*const category = document.querySelector('.mw-category');
+    const links = Array.from(category.querySelectorAll('a')); //把NODELIST轉為陣列
+    console.log(links)
+    const de = links
+                .map(link => link.textContent)
+                .filter(streetName => streetName.includes('de'));*/
 
     // 7. sort Exercise
+    //----按照字母表的順序，將人們的姓氏進行排序。
     // Sort the people alphabetically by last name
+    const alpha = people.sort((lastOne, nextOne) => {
+        const [aLast, aFirst] = lastOne.split(', ');
+        const [bLast, bFirst] = nextOne.split(', ');
+        return aLast > bLast ? 1 : -1;
+      });
+      console.log(alpha);
 
     // 8. Reduce Exercise
+    //----分別計算出包含每一個種類的個數。
     // Sum up the instances of each of these
     const data = ['car', 'car', 'truck', 'truck', 'bike', 'walk', 'car', 'van', 'bike', 'walk', 'car', 'van', 'car', 'truck' ];
 
+    const transportation = data.reduce(function (obj, item) {
+      if (!obj[item]) {
+        obj[item] = 0;
+      }
+      obj[item]++;
+      return obj;
+    }, {});
+
+    console.log(transportation);
   </script>
 </body>
 </html>
