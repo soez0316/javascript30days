@@ -24,6 +24,7 @@
     .panels {
       min-height:100vh;
       overflow: hidden;
+      display: flex;
     }
 
     .panel {
@@ -41,6 +42,11 @@
       font-size: 20px;
       background-size:cover;
       background-position:center;
+      display: flex;
+      flex: 1;
+      justify-content: center;
+      flex-direction: column;
+      
     }
 
 
@@ -49,12 +55,21 @@
     .panel3 { background-image:url(https://images.unsplash.com/photo-1465188162913-8fb5709d6d57?ixlib=rb-0.3.5&q=80&fm=jpg&crop=faces&cs=tinysrgb&w=1500&h=1500&fit=crop&s=967e8a713a4e395260793fc8c802901d); }
     .panel4 { background-image:url(https://source.unsplash.com/ITjiVXcwVng/1500x1500); }
     .panel5 { background-image:url(https://source.unsplash.com/3MNzGlQM7qs/1500x1500); }
-
+    
+    /* Flex Items */
     .panel > * {
       margin:0;
       width: 100%;
-      transition:transform 0.5s;
+      transition:transform .5s;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex: 1 0 auto;
     }
+    .panel > *:first-child { transform: translateY(-100%); }
+    .panel.open-active > *:first-child { transform: translateY(0); }
+    .panel > *:last-child { transform: translateY(100%); }
+    .panel.open-active > *:last-child { transform: translateY(0); }
 
     .panel p {
       text-transform: uppercase;
@@ -67,6 +82,7 @@
     }
 
     .panel.open {
+      flex: 5;
       font-size:40px;
     }
 
@@ -102,7 +118,19 @@
   </div>
 
   <script>
-
+    const panels = document.querySelectorAll('.panel');
+    function toggleOpen(){
+      this.classList.toggle('open');
+    }
+    function toggleActive(e) {
+      console.log(e.propertyName);
+      //因為safari&chrome對flex的名稱不同，所以只要屬性名中包含‘flex’，就繼續執行
+      if (e.propertyName.includes('flex')) {
+        this.classList.toggle('open-active');
+      }
+    }
+    panels.forEach(panel => panel.addEventListener('click', toggleOpen))
+    panels.forEach(panel => panel.addEventListener('transitionend', toggleActive));
   </script>
 
 
